@@ -106,10 +106,12 @@ include_directories(${catkin_INCLUDE_DIRS})
 set(PIDCONTROL_SOURCE_FILES
     src/pid_control.cpp
     src/controlnode.cpp
+    src/filtervelocity.cpp
 )
 
 set(PIDCONTROL_HEADER_FILES
     include/ardrone_velocity/controlnode.hpp
+    include/ardrone_velocity/filtervelocity.hpp
 )
 
 

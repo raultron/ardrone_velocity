@@ -178,8 +178,8 @@ int main(int argc,char* argv[])
             }
             else if(last_navdata.state == (int32_t)NavdataState::hovering){
                 quad_state = State::hovering_init;
-                ROS_INFO("Take off complete, waitin 0.5 seconds.");
-                timer1 = n.createTimer(ros::Duration(0.5), startFlying, true);
+                ROS_INFO("Take off complete, waiting 0.1 seconds.");
+                timer1 = n.createTimer(ros::Duration(0.1), startFlying, true);
             }
         }
         else if(quad_state == State::hovering_init){
