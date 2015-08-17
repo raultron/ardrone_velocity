@@ -74,11 +74,11 @@ void ControlNode::velocity_control(void){
     Kp_x = 0.6;
     Kp_y = 0.6;
 
-    Kd_x = 0.1;
-    Kd_y = 0.1;
+    Kd_x = 0.05;
+    Kd_y = 0.05;
 
-    Ki_x = 0.2;
-    Ki_y = 0.2;
+    Ki_x = 0.1;
+    Ki_y = 0.1;
 
     //We calculate the velocity error
     error_x = m_current_command.linear.x - m_odo_msg.twist.twist.linear.x;
