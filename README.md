@@ -1,11 +1,11 @@
 # ardrone_velocity
 ## Introduction
-Ardrone Velocity is a ROS Package for PID Velocity control of the AR.DRone 2.0. It is designed to work with the ardrone_autonomy package.
+Ardrone Velocity is a ROS Package for PID Velocity control of the AR.DRone 2.0. It is designed to work together with the ardrone_autonomy package.
 
-Based on a velocity reference (given by the user) and velocity measurements (obtained for ardrone_autonomy) this package implement a PID controller in order to control de velocity of the AR.Drone. Since this controller is dependant on Wifi communication with the AR.Drone it will have problems related to the delays in communication.
+Based on a velocity reference (given by the user) and a velocity measurement (obtained from ardrone_autonomy), this package implements a PID controller to control the velocity of the AR.Drone 2.0. Since this controller is dependant on Wifi communication with the AR.Drone it will have problems related to the delays in communication.
 
 ## Dependencies
-This package requires a working AR.Drone 2.0 and the ROS package ardrone_autonomy.
+This package requires an AR.Drone 2.0 and the ROS package ardrone_autonomy.
 
 ## Installation 
 ### Compile from source
