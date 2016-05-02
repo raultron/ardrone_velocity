@@ -53,7 +53,8 @@ void ControlNode::velocity_control(void){
     cmd_vel_out = m_current_command;
 
     // In case that we receive a special command to hover
-    if (cmd_vel_out.angular.x == 0 && cmd_vel_out.angular.y ==0 && cmd_vel_out.linear.x == 0 && cmd_vel_out.linear.y == 0 && cmd_vel_out.linear.z ==0){
+    if (cmd_vel_out.angular.x == 0 && cmd_vel_out.angular.y ==0 && cmd_vel_out.angular.z == 0 &&
+            cmd_vel_out.linear.x == 0 && cmd_vel_out.linear.y == 0 && cmd_vel_out.linear.z ==0){
         set_hover();
         //reset iterm
         m_i_term_x = 0.0;
@@ -142,7 +143,7 @@ void ControlNode::velocity_control(void){
     ROS_INFO("VelRef: %f", m_current_command.linear.x);
     ROS_INFO("Vel   : %f", m_odo_msg.twist.twist.linear.x);
     ROS_INFO("Error : %f", error_x);
-    ROS_INFO("Cmd   : %f", cmd_vel_out.linear.x);
+    ROS_INFO("Cmd   : %f", cmd_vel_out.angular.z);
     ROS_INFO("pterm | iterm | dterm   : %f | %f | %f", Kp_x*p_term_x, Kp_x*Ki_x*m_i_term_x, Kp_x*Kd_x*d_term_x);
     ROS_INFO("------------------------------------------------------");
 

@@ -6,11 +6,12 @@ SET(CMAKE_CXX_FLAGS "-std=c++0x")
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-	geometry_msgs
-	roscpp
-	rospy
-        std_msgs
-        nav_msgs)
+    geometry_msgs
+    roscpp
+    rospy
+    std_msgs
+    nav_msgs
+)
 
 #For Qt
 #find_package(Qt4 COMPONENTS QtCore QtGui)
@@ -123,6 +124,8 @@ add_executable(test_controller src/test_controller.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 ##add_dependencies(coop_uv_node coop_uv_generate_messages_cpp)
+#add_dependencies(pid_control ardrone_autonomy)
+#add_dependencies(test_controller ardrone_autonomy)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(pid_control ${catkin_LIBRARIES})
@@ -184,4 +187,3 @@ target_link_libraries(test_controller ${catkin_LIBRARIES})
 file(GLOB_RECURSE QT_MOC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS include/ardrone_velocity/*.hpp)
 FILE(GLOB_RECURSE INC_ALL "include/coop_uv_qt/*.hpp")
 FILE(GLOB_RECURSE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS src/*.cpp)
-
