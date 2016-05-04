@@ -42,6 +42,7 @@
 
   <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
@@ -52,6 +53,7 @@
 
   <!-- Dependencies needed after this package is compiled. -->
   <!-- <run_depend>rotors_comm</run_depend> -->
+  <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>

@@ -6,6 +6,7 @@ SET(CMAKE_CXX_FLAGS "-std=c++0x")
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+    dynamic_reconfigure
     geometry_msgs
     roscpp
     rospy
@@ -75,6 +76,12 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 #generate_messages(DEPENDENCIES  std_msgs)
 
+## Generate dynamic parameters
+generate_dynamic_reconfigure_options(
+  cfg/dynamic_param_config.cfg
+)
+
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -127,9 +134,12 @@ add_executable(test_controller src/test_controller.cpp)
 #add_dependencies(pid_control ardrone_autonomy)
 #add_dependencies(test_controller ardrone_autonomy)
 
+add_dependencies(pid_control ${PROJECT_NAME}_gencfg)
+
 ## Specify libraries to link a library or executable target against
 target_link_libraries(pid_control ${catkin_LIBRARIES})
 target_link_libraries(test_controller ${catkin_LIBRARIES})
+
 
 #target_link_libraries(mainQt ${catkin_LIBRARIES} ${QT_LIBRARIES})
 
