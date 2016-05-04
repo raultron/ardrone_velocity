@@ -10,10 +10,11 @@ ControlNode::ControlNode()
     params.param<std::string>("cmd_vel_ref_topic", s, "/cmd_vel_ref");
     m_cmd_vel_sub = nh.subscribe(s,1,&ControlNode::cmd_velCallback,this);
 
-    params.param<std::string>("cmd_vel_out_topic", s, "/cmd_vel");
-    m_quad_vel_sub = nh.subscribe(s,1,&ControlNode::m_quad_velCallback,this,ros::TransportHints().tcpNoDelay());
 
     params.param<std::string>("odometry_topic", s, "/ardrone/odometry");
+    m_quad_vel_sub = nh.subscribe(s,1,&ControlNode::m_quad_velCallback,this,ros::TransportHints().tcpNoDelay());
+
+    params.param<std::string>("cmd_vel_out_topic", s, "/cmd_vel");
     m_cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(s, 1);
 
 
@@ -86,8 +87,6 @@ void ControlNode::velocity_control(void){
     //!TODO: Consider measurement and controled variables delays.
 
 
-
-
     //We calculate the velocity error
     error_x = m_current_command.linear.x - m_odo_msg.twist.twist.linear.x;
     error_y = m_current_command.linear.y - m_odo_msg.twist.twist.linear.y;
@@ -103,7 +102,7 @@ void ControlNode::velocity_control(void){
     ros::Duration dt = t - old_t;
     old_t = t;
 
-    // Derivative term (based on veloctiy change instead of error change)
+    // Derivative term (based on velocity change instead of error change)
     // Note that we put the negative part here
     //d_term_x = -(m_odo_msg.twist.twist.linear.x - m_last_vel_x)/dt.toSec();
     //d_term_y = -(m_odo_msg.twist.twist.linear.y - m_last_vel_y)/dt.toSec();
