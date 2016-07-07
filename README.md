@@ -56,14 +56,31 @@ All units and frames are [ROS REP 103]{http://www.ros.org/reps/rep-0103.html} co
 ## Dynamic reconfiguration of PID Parameters
 It is possible to reconfigure dynamically the following parameters:
 
-* ``Kp_x``: Proportional Coefficient in X direction - Default = 0.6
-* ``Kp_y``: Proportional Coefficient in Y direction - Default = 0.6
-* ``Ki_x``: Integral Coefficient in X direction - Default = 0.05
-* ``Ki_y``: Integral Coefficient in Y direction - Default = 0.05
-* ``Kd_x``: Derivative Coefficient in X direction - Default = 0.1
-* ``Kd_y``: Derivative Coefficient in Y direction - Default = 0.1
+* ``Kp_x``: Proportional Coefficient in X direction - Default = 0.3
+* ``Kp_y``: Proportional Coefficient in Y direction - Default = 0.3
+* ``Ki_x``: Integral Coefficient in X direction - Default = 0.04
+* ``Ki_y``: Integral Coefficient in Y direction - Default = 0.04
+* ``Kd_x``: Derivative Coefficient in X direction - Default = 0.05
+* ``Kd_y``: Derivative Coefficient in Y direction - Default = 0.05
 
 Use the following command for convenient reconfiguration using a graphical user interface:
 ```
 rosrun rqt_reconfigure rqt_reconfigure
 ```
+
+The input of this package is a cmd_vel_pid Twist message with the required linear velocities in x,y,z in the quadcopter frame and the required angular velocity around z.
+
+The output of this package is a cmd_vel Twist message, all the values should be between (-1;+1) since that is expected by the Ardrone SDK (implemented in ROS by ardrone_autonomy package).
+The Ardrone SDK interprets the signals as follows:
+
+phi (left-right angle): cmd_vel.linear.x
+theta (front-back angle): cmd_vel.linear.y
+gaz (up-down vertical speed): cmd_vel.linear.z
+yaw (Angular speed around Z axis): cmd_vel.angular.z
+
+As stated in the Ardrone SDK Developers Manual:
+
+"In order to allow the user to choose between smooth or dynamic moves, the arguments of
+this function are not directly the control parameters values, but a percentage of the maximum
+corresponding values as set in the drone parameters. All parameters must thus be floatingpoint
+values between −1.0 and 1.0."

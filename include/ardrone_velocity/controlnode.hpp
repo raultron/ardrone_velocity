@@ -14,13 +14,13 @@ class ControlNode {
  public:
   ControlNode();
 
+  ros::NodeHandle nh;
+
   // ROS message callbacks
   void cmd_velCallback(const geometry_msgs::Twist& cmd_vel_in);
-  void m_quad_velCallback(const nav_msgs::Odometry& odo_msg);
+  void quad_odom_callback(const nav_msgs::Odometry& odo_msg);
   void dynamic_reconfigure_callback(
-      ardrone_velocity::dynamic_param_configConfig& config, uint32_t level);
-
-  ros::NodeHandle nh;
+      ardrone_velocity::dynamic_param_configConfig& config, uint32_t level);  
 
   // PID Controller
   void velocity_control(void);
