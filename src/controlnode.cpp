@@ -10,7 +10,7 @@ ControlNode::ControlNode() {
   m_cmd_vel_sub = nh.subscribe(s, 1, &ControlNode::cmd_velCallback, this);
 
   params.param<std::string>("odometry_topic", s, "/ardrone/odometry");
-  m_quad_vel_sub = nh.subscribe(s, 1, &ControlNode::m_quad_velCallback, this,
+  m_quad_vel_sub = nh.subscribe(s, 1, &ControlNode::quad_odom_callback, this,
                                 ros::TransportHints().tcpNoDelay());
 
   params.param<std::string>("cmd_vel_out_topic", s, "/cmd_vel");
@@ -32,7 +32,7 @@ void ControlNode::cmd_velCallback(const geometry_msgs::Twist& cmd_vel_in) {
   m_cmd_valid = true;
 }
 
-void ControlNode::m_quad_velCallback(const nav_msgs::Odometry& odo_msg) {
+void ControlNode::quad_odom_callback(const nav_msgs::Odometry& odo_msg) {
   std_msgs::Float64 debug_msg;
   m_odo_msg = odo_msg;
   m_filtered_vel_x = m_filter_vel_x.filter(m_odo_msg.twist.twist.linear.x);

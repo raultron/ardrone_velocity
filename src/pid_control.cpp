@@ -12,12 +12,12 @@ int main(int argc, char* argv[]) {
   ros::init(argc, argv, "pid_control");  // Name of the node
   ControlNode Node;
 
-  // int32_t looprate = 1000; //hz
-  // ros::Rate loop_rate(looprate);
+   int32_t looprate = 2000; //hz
+   ros::Rate loop_rate(looprate);
 
   // ros::spin();
   while (Node.nh.ok()) {
     ros::spinOnce();
-    // loop_rate.sleep();
+    loop_rate.sleep();
   }
 }
