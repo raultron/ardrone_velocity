@@ -17,7 +17,7 @@ for topic, msg, t in bag.read_messages('/ardrone/navdata'):
     vel.append(msg.vx)
     time.append(msg.header.stamp)
 bag.close()
-sample_rate = 1/0.004
+sample_rate = 25 #1/0.004
 
 vel_out_median = signal.medfilt(vel,21)
 #

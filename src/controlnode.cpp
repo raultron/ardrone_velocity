@@ -44,6 +44,7 @@ void ControlNode::quad_odom_callback(const nav_msgs::Odometry& odo_msg) {
 }
 
 void ControlNode::velocity_control(void) {
+  geometry_msgs::Twist current_command;
   double p_term_x, d_term_x;
   double p_term_y, d_term_y;
 
@@ -55,15 +56,15 @@ void ControlNode::velocity_control(void) {
   // We limit the maximum reference speed of the quadcopter
   //! TODO: Change this into ROS parameters
   double max_vel = 0.6;
-  m_current_command.linear.x = std::min(max_vel, m_current_command.linear.x);
-  m_current_command.linear.y = std::min(max_vel, m_current_command.linear.y);
+  current_command.linear.x = std::min(max_vel, m_current_command.linear.x);
+  current_command.linear.y = std::min(max_vel, m_current_command.linear.y);
 
-  m_current_command.linear.x = std::max(-max_vel, m_current_command.linear.x);
-  m_current_command.linear.y = std::max(-max_vel, m_current_command.linear.y);
+  current_command.linear.x = std::max(-max_vel, m_current_command.linear.x);
+  current_command.linear.y = std::max(-max_vel, m_current_command.linear.y);
 
   // We are only going to change linear.x and linear.y of this command
   // The rest of the values are the same
-  cmd_vel_out = m_current_command;
+  cmd_vel_out = current_command;
 
   // In case that we receive a special command to hover
   if (cmd_vel_out.angular.x == 0 && cmd_vel_out.angular.y == 0 &&
@@ -85,8 +86,8 @@ void ControlNode::velocity_control(void) {
   //!TODO: Consider measurement and controled variables delays.
 
   // We calculate the velocity error
-  error_x = m_current_command.linear.x - m_odo_msg.twist.twist.linear.x;
-  error_y = m_current_command.linear.y - m_odo_msg.twist.twist.linear.y;
+  error_x = current_command.linear.x - m_odo_msg.twist.twist.linear.x;
+  error_y = current_command.linear.y - m_odo_msg.twist.twist.linear.y;
 
   // The proportional term is directly the error
   p_term_x = error_x;
@@ -135,7 +136,7 @@ void ControlNode::velocity_control(void) {
   cmd_vel_out.linear.y =
       m_Kp_y * (p_term_y + m_Ki_y * m_i_term_y + m_Kd_x * d_term_y);
 
-  // Limit control command
+  // Limit control command to min max values of ardrone SDK (-1.0, 1.0)
   cmd_vel_out.linear.x = std::min(cmd_vel_out.linear.x, 1.0);
   cmd_vel_out.linear.y = std::min(cmd_vel_out.linear.y, 1.0);
 
