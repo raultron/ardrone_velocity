@@ -58,8 +58,7 @@ class ControlNode {
   double m_i_term_x;
   double m_i_term_y;
   // PID Coefficients
-  double m_Kp_x, m_Ki_x, m_Kd_x;
-  double m_Kp_y, m_Ki_y, m_Kd_y;
+  double m_Kp_xy, m_Ki_xy, m_Kd_xy;
 };
 
 #endif  // CONTROLNODE_HPP

@@ -44,27 +44,30 @@ void ControlNode::quad_odom_callback(const nav_msgs::Odometry& odo_msg) {
 }
 
 void ControlNode::velocity_control(void) {
-  geometry_msgs::Twist current_command;
   double p_term_x, d_term_x;
   double p_term_y, d_term_y;
 
-  double error_x, acc_error_x;
-  double error_y, acc_error_y;
+  double error_x;
+  double error_y;
 
   geometry_msgs::Twist cmd_vel_out;
+
+
 
   // We limit the maximum reference speed of the quadcopter
   //! TODO: Change this into ROS parameters
   double max_vel = 0.6;
-  current_command.linear.x = std::min(max_vel, m_current_command.linear.x);
-  current_command.linear.y = std::min(max_vel, m_current_command.linear.y);
+  m_current_command.linear.x = std::min(max_vel, m_current_command.linear.x);
+  m_current_command.linear.y = std::min(max_vel, m_current_command.linear.y);
 
-  current_command.linear.x = std::max(-max_vel, m_current_command.linear.x);
-  current_command.linear.y = std::max(-max_vel, m_current_command.linear.y);
+  m_current_command.linear.x = std::max(-max_vel, m_current_command.linear.x);
+  m_current_command.linear.y = std::max(-max_vel, m_current_command.linear.y);
 
   // We are only going to change linear.x and linear.y of this command
   // The rest of the values are the same
-  cmd_vel_out = current_command;
+   cmd_vel_out = m_current_command;
+
+
 
   // In case that we receive a special command to hover
   if (cmd_vel_out.angular.x == 0 && cmd_vel_out.angular.y == 0 &&
@@ -86,8 +89,8 @@ void ControlNode::velocity_control(void) {
   //!TODO: Consider measurement and controled variables delays.
 
   // We calculate the velocity error
-  error_x = current_command.linear.x - m_odo_msg.twist.twist.linear.x;
-  error_y = current_command.linear.y - m_odo_msg.twist.twist.linear.y;
+  error_x = m_current_command.linear.x - m_odo_msg.twist.twist.linear.x;
+  error_y = m_current_command.linear.y - m_odo_msg.twist.twist.linear.y;
 
   // The proportional term is directly the error
   p_term_x = error_x;
@@ -104,11 +107,10 @@ void ControlNode::velocity_control(void) {
   // Note that we put the negative part here
   // d_term_x = -(m_odo_msg.twist.twist.linear.x - m_last_vel_x)/dt.toSec();
   // d_term_y = -(m_odo_msg.twist.twist.linear.y - m_last_vel_y)/dt.toSec();
-  d_term_x = -(m_filtered_vel_x - m_last_vel_x) / 0.004;
-  d_term_y = -(m_filtered_vel_y - m_last_vel_y) / 0.004;
+  d_term_x = -(m_filtered_vel_x - m_last_vel_x) / dt.toSec();
+  d_term_y = -(m_filtered_vel_y - m_last_vel_y) / dt.toSec();
 
-  std_msgs::Float64 debug_msg;
-  debug_msg.data = d_term_x * m_Kp_x * m_Kd_x;
+  //std_msgs::Float64 debug_msg;
   // m_debug_pub.publish(debug_msg);
 
   m_last_vel_x = m_filtered_vel_x;
@@ -132,9 +134,9 @@ void ControlNode::velocity_control(void) {
 
   // Control command (PID)
   cmd_vel_out.linear.x =
-      m_Kp_x * (p_term_x + m_Ki_x * m_i_term_x + m_Kd_x * d_term_x);
+      m_Kp_xy * (p_term_x + m_Ki_xy * m_i_term_x + m_Kd_xy * d_term_x);
   cmd_vel_out.linear.y =
-      m_Kp_y * (p_term_y + m_Ki_y * m_i_term_y + m_Kd_x * d_term_y);
+      m_Kp_xy * (p_term_y + m_Ki_xy * m_i_term_y + m_Kd_xy * d_term_y);
 
   // Limit control command to min max values of ardrone SDK (-1.0, 1.0)
   cmd_vel_out.linear.x = std::min(cmd_vel_out.linear.x, 1.0);
@@ -159,6 +161,7 @@ void ControlNode::velocity_control(void) {
 
 void ControlNode::set_hover(void) {
   geometry_msgs::Twist cmd_vel_out;
+  ROS_INFO("Sending Hover command");
   cmd_vel_out.linear.x = 0;
   cmd_vel_out.linear.y = 0;
   cmd_vel_out.linear.z = 0;
@@ -183,15 +186,10 @@ void ControlNode::i_term_increase(double& i_term, double new_err, double cap) {
 
 void ControlNode::dynamic_reconfigure_callback(
     ardrone_velocity::dynamic_param_configConfig& config, uint32_t level) {
-  ROS_INFO("Reconfigure Request: %f %f %f %f %f %f", config.Kp_x, config.Kp_y,
-           config.Ki_x, config.Ki_y, config.Kd_x, config.Kd_y);
+  ROS_INFO("Reconfigure Request: %f %f %f", config.Kp_xy, config.Ki_xy, config.Kd_xy);
   // Coefficients for the PID controller
-  m_Kp_x = config.Kp_x;
-  m_Kp_y = config.Kp_y;
+  m_Kp_xy = config.Kp_xy;
+  m_Ki_xy = config.Ki_xy;
+  m_Kd_xy = config.Kd_xy;
 
-  m_Ki_x = config.Ki_x;
-  m_Ki_y = config.Ki_y;
-
-  m_Kd_x = config.Kd_x;
-  m_Kd_y = config.Kd_y;
 }
