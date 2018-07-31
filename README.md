@@ -56,12 +56,9 @@ All units and frames are [ROS REP 103]{http://www.ros.org/reps/rep-0103.html} co
 ## Dynamic reconfiguration of PID Parameters
 It is possible to reconfigure dynamically the following parameters:
 
-* ``Kp_x``: Proportional Coefficient in X direction - Default = 0.3
-* ``Kp_y``: Proportional Coefficient in Y direction - Default = 0.3
-* ``Ki_x``: Integral Coefficient in X direction - Default = 0.04
-* ``Ki_y``: Integral Coefficient in Y direction - Default = 0.04
-* ``Kd_x``: Derivative Coefficient in X direction - Default = 0.05
-* ``Kd_y``: Derivative Coefficient in Y direction - Default = 0.05
+* ``Kp_xy``: Proportional Coefficient in X and Y direction - Default = 0.3
+* ``Ki_xy``: Integral Coefficient in X and Y direction - Default = 0.04
+* ``Kd_xy``: Derivative Coefficient in X and Y direction - Default = 0.05
 
 Use the following command for convenient reconfiguration using a graphical user interface:
 ```
