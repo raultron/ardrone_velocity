@@ -70,10 +70,10 @@ The input of this package is a cmd_vel_pid Twist message with the required linea
 The output of this package is a cmd_vel Twist message, all the values should be between (-1;+1) since that is expected by the Ardrone SDK (implemented in ROS by ardrone_autonomy package).
 The Ardrone SDK interprets the signals as follows:
 
-phi (left-right angle): cmd_vel.linear.x
-theta (front-back angle): cmd_vel.linear.y
-gaz (up-down vertical speed): cmd_vel.linear.z
-yaw (Angular speed around Z axis): cmd_vel.angular.z
+* phi (left-right angle): cmd_vel.linear.x
+* theta (front-back angle): cmd_vel.linear.y
+* gaz (up-down vertical speed): cmd_vel.linear.z
+* yaw (Angular speed around Z axis): cmd_vel.angular.z
 
 As stated in the Ardrone SDK Developers Manual:
 
